@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>picamera2 demo</title>
+<script>
+    
+    var keyPressed = {};
+    const gearCode = [81,87,69,65,83,68];
+
+    function sendKey(keyPressed) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/keypress", true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.send(JSON.stringify({keyCode: keyPressed}));
+    }
+    // 키를 누를 때마다 해당 키의 누름 상태를 true로 설정합니다.
+    document.addEventListener("keydown", function(event) {
+        //if(gearCode.includes(event.keyCode)){
+        //    return
+        //}
+        keyPressed[event.keyCode] = true;
+        if(event.keyCode === 40 && keyPressed[38] == true){
+            delete keyPressed[event.keyCode];
+        }
+        
+        if(event.keyCode === 38 && keyPressed[40] == true){
+            delete keyPressed[event.keyCode];
+        }
+        
+        if(event.keyCode === 37 && keyPressed[39] == true){
+            delete keyPressed[event.keyCode];
+        }
+        
+        if(event.keyCode === 39 && keyPressed[37] == true){
+            delete keyPressed[event.keyCode];
+        }
+        sendKey(keyPressed);
+    });
+
+    // 키를 뗄 때마다 해당 키의 누름 상태를 false로 설정합니다.
+    document.addEventListener("keyup", function(event) {
+ /*       if(gearCode.includes(event.keyCode)){
+            keyPressed[event.keyCode] = true;
+            sendKey(keyPressed);
+            delete keyPressed[event.keyCode];
+        }
+        else{*/
+            delete keyPressed[event.keyCode];
+            sendKey(keyPressed);
+        //}
+    });
+
+</script>
+</head>
+<body>
+<h1>Picamera2 Streaming Demo</h1>
+<img src="stream.mjpg" width="640" height="480" />
+</body>
+</html>
+
